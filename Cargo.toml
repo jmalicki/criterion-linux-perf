@@ -12,8 +12,8 @@ repository = "https://github.com/bruceg/criterion-linux-perf"
 documentation = "https://docs.rs/criterion-linux-perf/"
 
 [dependencies]
-criterion = "0.4.0"
-perf-event = "0.4.8"
+criterion = "0.8"
+perf-event = "0.4"
 
 [[bench]]
 name = "test"

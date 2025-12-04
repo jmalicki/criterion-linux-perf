@@ -50,6 +50,7 @@ macro_rules! perf_mode {
                         PerfFormatter {
                             units: $unit,
                             throughput_bytes: concat!($unit, "/byte"),
+                            throughput_bits: concat!($unit, "/bit"),
                             throughput_elements: concat!($unit, "/element"),
                         }
                     ), )*
@@ -160,6 +161,7 @@ impl Measurement for PerfMeasurement {
 struct PerfFormatter {
     units: &'static str,
     throughput_bytes: &'static str,
+    throughput_bits: &'static str,
     throughput_elements: &'static str,
 }
 
@@ -182,9 +184,21 @@ impl ValueFormatter for PerfFormatter {
                 }
                 self.throughput_bytes
             }
+            Throughput::Bits(n) => {
+                for val in values {
+                    *val /= *n as f64;
+                }
+                self.throughput_bits
+            }
             Throughput::Elements(n) => {
                 for val in values {
                     *val /= *n as f64;
+                }
+                self.throughput_elements
+            }
+            Throughput::ElementsAndBytes { elements, .. } => {
+                for val in values {
+                    *val /= *elements as f64;
                 }
                 self.throughput_elements
             }
